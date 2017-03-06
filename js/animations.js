@@ -49,59 +49,70 @@ $(document).ready(function () {
         }
     });
 
-
-
     tweetButton.on('click',function (e) {
-       if(tweetBox.val() && tweetBox.val().length <= originalCount){
+       if(tweetBox.val() && tweetBox.val().length <= originalCount) {
            var newTweet = tweetBox.val();
            var timeStamp = jQuery.timeago(new Date());
            $('#stream').prepend('<div class="tweet">' +
-                                '<div class="content">' +
-                                '<img class="avatar" src="img/alagoon.jpg">' +
-                                '<strong class="fullname">Your name here</strong>' +
-                                '<span class="username"> @YourNameHere</span>' +
-                                '<p class="tweet-text">' + newTweet + '</p>' +
-                                '<div class="tweet-actions">' +
-                                '<ul>' +
-                                '<li><span class="icon action-reply"></span> Reply</li>' +
-                                '<li><span class="icon action-retweet"></span> Retweet</li>' +
-                                '<li><span class="icon action-favorite"></span> Favorite</li>' +
-                                '<li><span class="icon action-more"></span> More</li>' +
-                                '</ul>' +
-                                '</div>' +
-                                '</div>' +
-                                '<div class="stats">' +
-                                '<div class="retweets">' +
-                                '<p class="num-retweets">0</p>' +
-                                '<p>RETWEETS</p>' +
-                                '</div>' +
-                                '<div class="favorites">' +
-                                '<p class="num-favorites">0</p>' +
-                                '<p>FAVORITES</p>' +
-                                '</div>' +
-                                '<div class="users-interact">' +
-                                '<div>'+
-                                '<img src="img/vklimenko.jpg" />' +
-                                '<img src="img/funwatercat.jpg" />' +
-                                '</div>' +
-                                '</div>' +
-                                '<div class="time">' + timeStamp + '</div>' +
-                                '</div>'+
-                                '<div class="reply">' +
-                                '<img class="avatar" src="img/alagoon.jpg" />' +
-                                '<textarea class="tweet-reply" placeholder="Reply to @YourNameHere"/></textarea>' +
-                                '</div>' +
-                                '</div>');
+                                   '<div class="content">' +
+                                   '<img class="avatar" src="img/alagoon.jpg">' +
+                                   '<strong class="fullname">Your name here</strong>' +
+                                   '<span class="username"> @YourNameHere</span>' +
+                                   '<p class="tweet-text">' + newTweet + '</p>' +
+                                   '<div class="tweet-actions">' +
+                                   '<ul>' +
+                                   '<li><span class="icon action-reply"></span> Reply</li>' +
+                                   '<li><span class="icon action-retweet"></span> <a  type="button" class="rtbutton"> Retweet</a></li>' +
+                                   '<li><span class="icon action-favorite"></span> <a  type="button" class="fav"> Favorite</a></li>' +
+                                   '<li><span class="icon action-more"></span> More</li>' +
+                                   '</ul>' +
+                                   '</div>' +
+                                   '</div>' +
+                                   '<div class="stats">' +
+                                        '<div class="retweets">' +
+                                                '<p class="num-retweets">0</p>' +
+                                                '<p>RETWEETS</p>' +
+                                        '</div>' +
+                                   '<div class="favorites">' +
+                                   '<p class="num-favorites">0</p>' +
+                                   '<p>FAVORITES</p>' +
+                                   '</div>' +
+                                   '<div class="users-interact">' +
+                                   '<div>'+
+                                   '<img src="img/vklimenko.jpg" />' +
+                                   '<img src="img/funwatercat.jpg" />' +
+                                   '</div>' +
+                                   '</div>' +
+                                   '<div class="time">' + timeStamp + '</div>' +
+                                   '</div>'+
+                                   '<div class="reply">' +
+                                   '<img class="avatar" src="img/alagoon.jpg" />' +
+                                   '<textarea class="tweet-reply" placeholder="Reply to @YourNameHere"/></textarea>' +
+                                   '</div>' +
+                                   '</div>');
+           $('.tweet-actions').hide();
+           $('.stats').hide();
        }
-        $('.tweet-actions').hide();
-        //$('.stats').hide();
-
         tweetBox.val("");
         counter.html(tweetBox.val().length + originalCount);
     });
 
-    $('.content').hover(function () {
-        $(this).find(tweetAction).toggle(300);
-        $(this).find(".stats").toggle(300);
+    $(document).on('mouseenter mouseleave', '.content',(function () {
+        $(this).find('.tweet-actions').toggle(200);
+    }));
+
+    $(document).on('click', '.tweet-reply', function () {
+        $(this).parent().siblings('.stats').toggle(200);
+    });
+
+
+    $(document).on('click', '.fav', function (e) {
+        var numFavs = parseInt($(this).closest('.content').find('.num-favorites').text());
+        $(this).closest('.content').find('.num-favorites').text(++numFavs);
+    });
+
+    $(document).on('click', '.rtButton', function (e) {
+        var numTweets = parseInt($(this).closest('.content').find('.num-retweets').text());
+        $(this).closest('.content').find('.num-retweets').text(++numTweets);
     });
 });
